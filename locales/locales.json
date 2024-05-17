@@ -1,0 +1,22 @@
+{
+    "app.name": {
+        "en": "HeartStats",
+        "ru": "СердцеСтат"
+    },
+    "app.menu.input_panel_button_label": {
+        "en": "Input",
+        "ru": "Ввод"
+    },
+    "app.menu.plot_panel_button_label": {
+        "en": "Plot",
+        "ru": "Визуализация"
+    },
+    "app.menu.home_panel_button_label": {
+        "en": "",
+        "ru": ""
+    },
+    "app.home_panel.content": {
+        "en": "Hello, do you wanna track your blood pressure? So you'are found us",
+        "ru": "Привет, хотели отслеживать ваше кровяносное давление? Тогда вы по адрессу"
+    }
+}
