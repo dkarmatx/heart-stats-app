@@ -1,6 +1,7 @@
 mod app;
 mod menu;
 mod panels;
+mod dialog;
 
 fn main() -> eframe::Result<()> {
     env_logger::init();
