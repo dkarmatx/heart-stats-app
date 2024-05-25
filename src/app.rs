@@ -1,6 +1,6 @@
 
 use super::menu::{Menu, MenuOption};
-use super::panels::{HomePanel, InputPanel, PanelError};
+use super::panels::{HomePanel, InputPanel};
 use super::dialog::Window;
 
 

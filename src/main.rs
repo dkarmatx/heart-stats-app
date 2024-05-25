@@ -2,13 +2,13 @@ mod app;
 mod menu;
 mod panels;
 mod dialog;
+mod util;
 
 fn main() -> eframe::Result<()> {
     env_logger::init();
 
     let lang = "ru";
     let application = app::Application::new(lang);
-
     let native_options = eframe::NativeOptions{
         follow_system_theme: true,
         viewport: egui::ViewportBuilder::default()
@@ -27,5 +27,6 @@ fn main() -> eframe::Result<()> {
         native_options,
         Box::new(|_cc| {
             Box::new(application)
-        }))
+        })
+    )
 }
