@@ -7,20 +7,17 @@ pub enum MenuOption {
 }
 
 impl MenuOption {
-    const SELECTABLE: [MenuOption; 2] = [
-        MenuOption::InputPanel,
-        MenuOption::PlotPanel,
-    ];
+    const SELECTABLE: [MenuOption; 2] = [MenuOption::InputPanel, MenuOption::PlotPanel];
 
     pub fn label(&self) -> String {
         match self {
             Self::InputPanel => t!("app.menu.input_panel_button_label"),
-            Self::PlotPanel  => t!("app.menu.plot_panel_button_label"),
-            Self::HomePanel  => t!("app.menu.home_panel_button_label"),
-        }.into()
+            Self::PlotPanel => t!("app.menu.plot_panel_button_label"),
+            Self::HomePanel => t!("app.menu.home_panel_button_label"),
+        }
+        .into()
     }
 }
-
 
 #[derive(Default)]
 pub struct Menu {

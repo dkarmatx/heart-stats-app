@@ -1,4 +1,3 @@
-
 #[derive(Default)]
 pub struct Window {
     title: String,
@@ -20,27 +19,37 @@ impl Window {
                     .with_always_on_top(),
                 |ctx, _class| {
                     egui::CentralPanel::default().show(ctx, |ui| {
-                        let text_area_size = egui::Vec2::new(ui.available_width(), ui.available_height() - 32.0);
+                        let text_area_size =
+                            egui::Vec2::new(ui.available_width(), ui.available_height() - 32.0);
                         let button_area_size = egui::Vec2::new(ui.available_width(), 32.0);
 
                         ui.allocate_ui_with_layout(
                             text_area_size,
                             egui::Layout::left_to_right(egui::Align::Center),
-                            |ui|{
+                            |ui| {
                                 ui.style_mut().wrap = Some(true);
                                 ui.label(self.text.as_str());
-                            });
+                            },
+                        );
 
                         ui.allocate_ui_with_layout(
                             button_area_size,
                             egui::Layout::right_to_left(egui::Align::Center),
                             |ui| {
-                                if ui.add_sized([72.0, 16.0], egui::Button::new(self.button.as_str())).clicked() {
+                                if ui
+                                    .add_sized(
+                                        [72.0, 16.0],
+                                        egui::Button::new(self.button.as_str()),
+                                    )
+                                    .clicked()
+                                {
                                     self.close()
                                 }
-                            });
+                            },
+                        );
                     });
-                });
+                },
+            );
         }
     }
 

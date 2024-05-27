@@ -35,7 +35,8 @@ fn month_to_locales_string(m: Month) -> String {
         Month::October => t!("date_picker.month.october"),
         Month::November => t!("date_picker.month.november"),
         Month::December => t!("date_picker.month.december"),
-    }.into()
+    }
+    .into()
 }
 
 fn weekday_to_locales_string(w: Weekday) -> String {
@@ -47,7 +48,8 @@ fn weekday_to_locales_string(w: Weekday) -> String {
         Weekday::Friday => t!("date_picker.weekday.friday"),
         Weekday::Saturday => t!("date_picker.weekday.saturday"),
         Weekday::Sunday => t!("date_picker.weekday.sunday"),
-    }.into()
+    }
+    .into()
 }
 
 impl DatePicker<'_> {
@@ -72,8 +74,8 @@ impl DatePicker<'_> {
                     Month::November,
                     Month::December,
                 ] {
-                    let button_text = egui::RichText::new(month_to_locales_string(m))
-                        .size(self.menu_font_size);
+                    let button_text =
+                        egui::RichText::new(month_to_locales_string(m)).size(self.menu_font_size);
                     let button = egui::Button::new(button_text).selected(m == current_month);
 
                     if ui.add(button).clicked() {
@@ -93,8 +95,7 @@ impl DatePicker<'_> {
         ui.menu_button(button_text, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 for y in 1982..2042 {
-                    let button_text =
-                        egui::RichText::new(y.to_string()).size(self.menu_font_size);
+                    let button_text = egui::RichText::new(y.to_string()).size(self.menu_font_size);
                     let button = egui::Button::new(button_text).selected(y == current_year);
 
                     if ui.add(button).clicked() {
@@ -148,15 +149,17 @@ impl DatePicker<'_> {
 
     fn show_calendar_day(&mut self, date: &Date, ui: &mut egui::Ui) -> egui::Response {
         ui.centered_and_justified(|ui| {
-            let text = egui::RichText::new(date.day().to_string())
-                .size(self.calendar_font_size);
+            let text = egui::RichText::new(date.day().to_string()).size(self.calendar_font_size);
 
             let button = egui::Button::new(text)
                 .frame(false)
                 .selected(self.date == date);
 
             ui.visuals_mut().button_frame = false;
-            if ui.add_enabled(self.date.month() == date.month(), button).clicked() {
+            if ui
+                .add_enabled(self.date.month() == date.month(), button)
+                .clicked()
+            {
                 *self.date = *date;
             }
         })
@@ -170,12 +173,9 @@ impl DatePicker<'_> {
                 self.show_calendar_weekdays(ui);
 
                 let first_day_at_month = self.date.replace_day(1).unwrap();
-                let first_dat_at_grid =
-                    first_day_at_month.saturating_sub(
-                        time::Duration::days(
-                            first_day_at_month.weekday().number_days_from_monday() as i64
-                        )
-                    );
+                let first_dat_at_grid = first_day_at_month.saturating_sub(time::Duration::days(
+                    first_day_at_month.weekday().number_days_from_monday() as i64,
+                ));
 
                 let mut day = first_dat_at_grid;
                 for _w in 0..6 {
@@ -190,32 +190,28 @@ impl DatePicker<'_> {
 
     fn show_month_move_button(&mut self, ui: &mut egui::Ui, direction: &str) {
         let next_date = match direction {
-            ">" => {
-                Date::from_calendar_date(
-                    self.date.year().saturating_add(
-                        if self.date.month() == Month::December {
-                            1
-                        } else {
-                            0
-                        }
-                    ),
-                    self.date.month().next(),
-                    1
-                )
-            },
-            _ => {
-                Date::from_calendar_date(
-                    self.date.year().saturating_sub(
-                        if self.date.month() == Month::January {
-                            1
-                        } else {
-                            0
-                        }
-                    ),
-                    self.date.month().previous(),
-                    1
-                )
-            }
+            ">" => Date::from_calendar_date(
+                self.date
+                    .year()
+                    .saturating_add(if self.date.month() == Month::December {
+                        1
+                    } else {
+                        0
+                    }),
+                self.date.month().next(),
+                1,
+            ),
+            _ => Date::from_calendar_date(
+                self.date
+                    .year()
+                    .saturating_sub(if self.date.month() == Month::January {
+                        1
+                    } else {
+                        0
+                    }),
+                self.date.month().previous(),
+                1,
+            ),
         };
         ui.visuals_mut().button_frame = false;
         ui.centered_and_justified(|ui| {

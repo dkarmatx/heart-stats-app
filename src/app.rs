@@ -1,10 +1,8 @@
-
 use egui::TextBuffer;
 
+use super::dialog::Window;
 use super::menu::{Menu, MenuOption};
 use super::panels::{HomePanel, InputPanel};
-use super::dialog::Window;
-
 
 pub struct Application {
     // Modal window
@@ -39,42 +37,39 @@ impl eframe::App for Application {
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
         }
 
-        let selected_menu_option =
-            egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+        let selected_menu_option = egui::TopBottomPanel::top("top_panel")
+            .show(ctx, |ui| {
                 ui.set_enabled(!self.dialog.is_opened());
 
                 self.menu.ui(ui).inner
-            }).inner;
+            })
+            .inner;
 
-        let panel_error_opt =
-            egui::CentralPanel::default().show(ctx, |ui| {
+        let panel_error_opt = egui::CentralPanel::default()
+            .show(ctx, |ui| {
                 ui.set_enabled(!self.dialog.is_opened());
 
                 match selected_menu_option {
-                    MenuOption::HomePanel => { self.home_panel.ui(ui).err() },
-                    MenuOption::PlotPanel => { self.plot_panel.ui(ui).err() },
-                    MenuOption::InputPanel => {
-                        self.input_panel.ui(ui).err()
-                    },
+                    MenuOption::HomePanel => self.home_panel.ui(ui).err(),
+                    MenuOption::PlotPanel => self.plot_panel.ui(ui).err(),
+                    MenuOption::InputPanel => self.input_panel.ui(ui).err(),
                 }
-            }).inner;
+            })
+            .inner;
 
         if let Some(error) = panel_error_opt {
-            let (title_text, button_text) =
-                if error.is_fatal() {
-                    self.need_exit = true;
-                    (
-                        t!("app.dialog.fatal_title"),
-                        t!("app.dialog.fatal_button")
-                    )
-                } else {
-                    (
-                        t!("app.dialog.title"),
-                        t!("app.dialog.button")
-                    )
-                };
+            let (title_text, button_text) = if error.is_fatal() {
+                self.need_exit = true;
+                (t!("app.dialog.fatal_title"), t!("app.dialog.fatal_button"))
+            } else {
+                (t!("app.dialog.title"), t!("app.dialog.button"))
+            };
 
-            self.dialog.open(title_text.as_str(), button_text.as_str(), error.desc().as_str());
+            self.dialog.open(
+                title_text.as_str(),
+                button_text.as_str(),
+                error.desc().as_str(),
+            );
         }
     }
 }
