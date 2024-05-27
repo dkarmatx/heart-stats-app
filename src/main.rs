@@ -1,6 +1,3 @@
-use egui::TextBuffer;
-use rust_i18n::set_locale;
-
 mod app;
 mod menu;
 mod panels;
@@ -11,11 +8,11 @@ mod date_picker;
 
 #[macro_use]
 extern crate rust_i18n;
-i18n!("locales");
+rust_i18n::i18n!("locales");
 
 fn main() -> eframe::Result<()> {
     env_logger::init();
-    set_locale("ru");
+    rust_i18n::set_locale("ru");
 
     let application = app::Application::new();
     let native_options = eframe::NativeOptions{
@@ -32,7 +29,7 @@ fn main() -> eframe::Result<()> {
     };
 
     eframe::run_native(
-        t!("app.name").as_str(),
+        t!("app.name").to_string().as_str(),
         native_options,
         Box::new(|_cc| {
             Box::new(application)

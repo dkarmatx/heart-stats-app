@@ -58,3 +58,7 @@ date_picker.weekday.saturday:
 date_picker.weekday.sunday:
   ru: Вс
   en: Sun
+
+date_picker.today:
+  ru: Сегодня
+  en: Today
