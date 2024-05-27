@@ -2,7 +2,6 @@ mod app;
 mod menu;
 mod panels;
 mod dialog;
-mod util;
 mod date_picker;
 
 
