@@ -35,9 +35,6 @@ impl Application {
 
 impl eframe::App for Application {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let lang = self.lang.clone();
-        let lang = lang.as_str();
-
         self.dialog.ui(ctx);
         if self.need_exit && !self.dialog.is_opened() {
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -47,7 +44,7 @@ impl eframe::App for Application {
             egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
                 ui.set_enabled(!self.dialog.is_opened());
 
-                self.menu.ui(ui, lang).inner
+                self.menu.ui(ui, self.lang.as_str()).inner
             }).inner;
 
         let panel_error_opt =
@@ -55,10 +52,10 @@ impl eframe::App for Application {
                 ui.set_enabled(!self.dialog.is_opened());
 
                 match selected_menu_option {
-                    MenuOption::HomePanel => { self.home_panel.ui(ui, lang).err() },
-                    MenuOption::PlotPanel => { self.plot_panel.ui(ui, lang).err() },
+                    MenuOption::HomePanel => { self.home_panel.ui(ui, self.lang.as_str()).err() },
+                    MenuOption::PlotPanel => { self.plot_panel.ui(ui, self.lang.as_str()).err() },
                     MenuOption::InputPanel => {
-                        self.input_panel.ui(ui, lang).err()
+                        self.input_panel.ui(ui, self.lang.as_str()).err()
                     },
                 }
             }).inner;
@@ -68,20 +65,20 @@ impl eframe::App for Application {
                 if error.is_fatal() {
                     self.need_exit = true;
                     (
-                        locales::t!("app.dialog.fatal_title", lang),
-                        locales::t!("app.dialog.fatal_button", lang)
+                        locales::t!("app.dialog.fatal_title", self.lang.as_str()),
+                        locales::t!("app.dialog.fatal_button", self.lang.as_str())
                     )
                 } else {
                     (
-                        locales::t!("app.dialog.title", lang),
-                        locales::t!("app.dialog.button", lang)
+                        locales::t!("app.dialog.title", self.lang.as_str()),
+                        locales::t!("app.dialog.button", self.lang.as_str())
                     )
                 };
 
             self.dialog.open(
                 title_text.as_str(),
                 button_text.as_str(),
-                error.desc(lang).as_str());
+                error.desc(self.lang.as_str()).as_str());
         }
     }
 }
