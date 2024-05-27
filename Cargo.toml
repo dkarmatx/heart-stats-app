@@ -10,5 +10,6 @@ eframe = "0.27.2"
 egui = "0.27.2"
 egui_plot = "0.27.2"
 env_logger = "0.11.3"
-locales = "0.1.0"
 log = "0.4.21"
+rust-i18n = { version = "3.0.1" }
+time = { version = "0.3.36", features = ["formatting", "macros"] }

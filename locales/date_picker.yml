@@ -1,0 +1,60 @@
+_version: 2
+
+date_picker.month.january:
+  ru: Январь
+  en: January
+date_picker.month.february:
+  ru: Февраль
+  en: February
+date_picker.month.march:
+  ru: Март
+  en: March
+date_picker.month.april:
+  ru: Апрель
+  en: April
+date_picker.month.may:
+  ru: Май
+  en: May
+date_picker.month.june:
+  ru: Июнь
+  en: June
+date_picker.month.july:
+  ru: Июль
+  en: July
+date_picker.month.august:
+  ru: Август
+  en: August
+date_picker.month.september:
+  ru: Сентябрь
+  en: September
+date_picker.month.october:
+  ru: Октябрь
+  en: October
+date_picker.month.november:
+  ru: Ноябрь
+  en: November
+date_picker.month.december:
+  ru: Декабрь
+  en: December
+
+date_picker.weekday.monday:
+  ru: Пн
+  en: Mon
+date_picker.weekday.tuesday:
+  ru: Вт
+  en: Tue
+date_picker.weekday.wednesday:
+  ru: Ср
+  en: Wed
+date_picker.weekday.thursday:
+  ru: Чт
+  en: Thu
+date_picker.weekday.friday:
+  ru: Пт
+  en: Fri
+date_picker.weekday.saturday:
+  ru: Сб
+  en: Sat
+date_picker.weekday.sunday:
+  ru: Вс
+  en: Sun

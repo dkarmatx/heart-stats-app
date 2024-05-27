@@ -2,9 +2,9 @@
 pub struct HomePanel {}
 
 impl HomePanel {
-    pub fn ui(&mut self, ui: &mut egui::Ui, lang: &str) -> super::Result<()> {
+    pub fn ui(&mut self, ui: &mut egui::Ui) -> super::Result<()> {
         let content =
-            egui::RichText::new(locales::t!("app.home_panel.content", lang))
+            egui::RichText::new(t!("app.home_panel.content"))
                 .color(egui::Color32::GRAY)
                 .size(16.0);
 

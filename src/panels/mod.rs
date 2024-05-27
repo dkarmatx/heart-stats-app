@@ -11,13 +11,13 @@ pub enum PanelError {
 }
 
 impl PanelError {
-    pub fn desc(&self, lang: &str) -> String {
+    pub fn desc(&self) -> String {
         match self {
             Self::Error(desc) => {
-                locales::t!("app.errors.error_template", desc: desc.as_str(), lang)
+                t!("app.errors.error_template", desc = desc.as_str()).to_string()
             },
             Self::FatalError(desc) => {
-                locales::t!("app.errors.fatal_error_template", desc: desc.as_str(), lang)
+                t!("app.errors.fatal_error_template", desc = desc.as_str()).to_string()
             },
         }
     }

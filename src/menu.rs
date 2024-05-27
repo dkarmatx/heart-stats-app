@@ -12,12 +12,12 @@ impl MenuOption {
         MenuOption::PlotPanel,
     ];
 
-    pub fn label(&self, lang: &str) -> String {
+    pub fn label(&self) -> String {
         match self {
-            Self::InputPanel => locales::t!("app.menu.input_panel_button_label", lang),
-            Self::PlotPanel  => locales::t!("app.menu.plot_panel_button_label", lang),
-            Self::HomePanel  => locales::t!("app.menu.home_panel_button_label", lang),
-        }
+            Self::InputPanel => t!("app.menu.input_panel_button_label"),
+            Self::PlotPanel  => t!("app.menu.plot_panel_button_label"),
+            Self::HomePanel  => t!("app.menu.home_panel_button_label"),
+        }.into()
     }
 }
 
@@ -28,10 +28,10 @@ pub struct Menu {
 }
 
 impl Menu {
-    pub fn ui(&mut self, ui: &mut egui::Ui, lang: &str) -> egui::InnerResponse<MenuOption> {
+    pub fn ui(&mut self, ui: &mut egui::Ui) -> egui::InnerResponse<MenuOption> {
         egui::menu::bar(ui, |ui| {
             for opt in MenuOption::SELECTABLE {
-                if ui.button(opt.label(lang)).clicked() {
+                if ui.button(opt.label()).clicked() {
                     self.selected = opt;
                 }
             }

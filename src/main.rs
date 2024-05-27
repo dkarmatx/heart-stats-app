@@ -1,14 +1,23 @@
+use egui::TextBuffer;
+use rust_i18n::set_locale;
+
 mod app;
 mod menu;
 mod panels;
 mod dialog;
 mod util;
+mod date_picker;
+
+
+#[macro_use]
+extern crate rust_i18n;
+i18n!("locales");
 
 fn main() -> eframe::Result<()> {
     env_logger::init();
+    set_locale("ru");
 
-    let lang = "ru";
-    let application = app::Application::new(lang);
+    let application = app::Application::new();
     let native_options = eframe::NativeOptions{
         follow_system_theme: true,
         viewport: egui::ViewportBuilder::default()
@@ -23,7 +32,7 @@ fn main() -> eframe::Result<()> {
     };
 
     eframe::run_native(
-        locales::t!("app.name", lang).as_str(),
+        t!("app.name").as_str(),
         native_options,
         Box::new(|_cc| {
             Box::new(application)

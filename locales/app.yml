@@ -1,0 +1,35 @@
+_version: 2
+
+app.name:
+  en: HeartStats
+  ru: СердцеСтат
+app.dialog.title:
+  en: Error
+  ru: Ошибка
+app.dialog.fatal_title:
+  en: Fatal error
+  ru: Критическая ошибка
+app.dialog.button:
+  en: OK
+  ru: OK
+app.dialog.fatal_button:
+  en: Exit
+  ru: Завершить
+app.errors.error_template:
+  en: 'Error: %{desc}'
+  ru: 'Ошибка: %{desc}'
+app.errors.fatal_error_template:
+  en: 'Application shutdowning, cause fatal error: %{desc}'
+  ru: 'Приложение закрывается, возникла критическая ошибка: %{desc}'
+app.menu.input_panel_button_label:
+  en: Input
+  ru: Ввод
+app.menu.plot_panel_button_label:
+  en: Plot
+  ru: Визуализация
+app.menu.home_panel_button_label:
+  en: ''
+  ru: ''
+app.home_panel.content:
+  en: Hello, do you wanna track your blood pressure? So you'are found us
+  ru: Привет, хотели отслеживать ваше кровяносное давление? Тогда вы по адрессу
