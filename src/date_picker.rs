@@ -1,4 +1,10 @@
+use egui::Widget;
 use time::{Date, Month, Weekday};
+
+#[derive(Default, Clone, Copy)]
+pub struct DatePickerState {
+    calendar_opened: bool,
+}
 
 pub struct DatePicker<'a> {
     date: &'a mut Date,
@@ -13,9 +19,9 @@ impl<'a> DatePicker<'a> {
     pub fn new(id: impl std::hash::Hash, ui: &egui::Ui, date: &'a mut Date) -> Self {
         Self {
             date: date,
-            title_font_size: ui.text_style_height(&egui::TextStyle::Button) * 1.11,
-            calendar_font_size: ui.text_style_height(&egui::TextStyle::Button),
-            menu_font_size: ui.text_style_height(&egui::TextStyle::Button),
+            title_font_size: ui.text_style_height(&egui::TextStyle::Button),
+            calendar_font_size: ui.text_style_height(&egui::TextStyle::Button) * 0.85,
+            menu_font_size: ui.text_style_height(&egui::TextStyle::Button) * 0.85,
             id: egui::Id::new(id),
         }
     }
@@ -76,7 +82,14 @@ impl DatePicker<'_> {
                 ] {
                     let button_text =
                         egui::RichText::new(month_to_locales_string(m)).size(self.menu_font_size);
-                    let button = egui::Button::new(button_text).selected(m == current_month);
+                    let button = egui::Button::new(button_text);
+                    let button = if m == current_month {
+                        button
+                            .fill(ui.visuals().widgets.active.bg_fill)
+                            .stroke(ui.visuals().widgets.active.bg_stroke)
+                    } else {
+                        button
+                    };
 
                     if ui.add(button).clicked() {
                         *self.date = Date::from_calendar_date(self.date.year(), m, 1).unwrap();
@@ -89,14 +102,20 @@ impl DatePicker<'_> {
 
     fn show_year_button(&mut self, ui: &mut egui::Ui) {
         let current_year = self.date.year();
-        let button_text = egui::RichText::new(current_year.to_string())
-            .size(ui.text_style_height(&egui::TextStyle::Button) * 1.3);
+        let button_text = egui::RichText::new(current_year.to_string()).size(self.title_font_size);
 
         ui.menu_button(button_text, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 for y in 1982..2042 {
                     let button_text = egui::RichText::new(y.to_string()).size(self.menu_font_size);
                     let button = egui::Button::new(button_text).selected(y == current_year);
+                    let button = if y == current_year {
+                        button
+                            .fill(ui.visuals().widgets.active.bg_fill)
+                            .stroke(ui.visuals().widgets.active.bg_stroke)
+                    } else {
+                        button
+                    };
 
                     if ui.add(button).clicked() {
                         *self.date = Date::from_calendar_date(y, self.date.month(), 1).unwrap();
@@ -114,15 +133,18 @@ impl DatePicker<'_> {
             .num_columns(4)
             .spacing(egui::vec2(0.0, 0.0))
             .min_row_height(calendar_title_rect.size().y)
-            .min_col_width(calendar_title_rect.size().x / 4.0)
+            .min_col_width((calendar_title_rect.size().x) / 4.0)
             .show(ui, |ui| {
                 ui.centered_and_justified(|ui| ui.label(""));
-                ui.centered_and_justified(|ui| {
+                ui.with_layout(egui::Layout::top_down_justified(egui::Align::RIGHT), |ui| {
                     self.show_month_button(ui);
                 });
-                ui.centered_and_justified(|ui| {
-                    self.show_year_button(ui);
-                });
+                ui.with_layout(
+                    egui::Layout::top_down_justified(egui::Align::Center),
+                    |ui| {
+                        self.show_year_button(ui);
+                    },
+                );
                 ui.centered_and_justified(|ui| ui.label(""));
                 ui.end_row();
             });
@@ -151,15 +173,18 @@ impl DatePicker<'_> {
         ui.centered_and_justified(|ui| {
             let text = egui::RichText::new(date.day().to_string()).size(self.calendar_font_size);
 
-            let button = egui::Button::new(text)
-                .frame(false)
-                .selected(self.date == date);
+            let button = egui::Button::new(text).frame(self.date.month() == date.month());
+            let button = if self.date == date {
+                button
+                    .stroke(ui.visuals().widgets.active.bg_stroke)
+                    .fill(ui.visuals().widgets.open.weak_bg_fill)
+            } else {
+                button
+            };
 
             ui.visuals_mut().button_frame = false;
-            if ui
-                .add_enabled(self.date.month() == date.month(), button)
-                .clicked()
-            {
+            if ui.add_enabled(self.date != date, button).clicked() {
+                ui.memory_mut(|memory| memory.toggle_popup(self.id));
                 *self.date = *date;
             }
         })
@@ -168,7 +193,8 @@ impl DatePicker<'_> {
 
     fn show_calendar_grid(&mut self, ui: &mut egui::Ui) {
         egui::Grid::new("calendar")
-            .min_row_height(self.calendar_font_size * 1.7)
+            .spacing(egui::vec2(6.0, 6.0))
+            .min_row_height(self.calendar_font_size * 2.0)
             .show(ui, |ui| {
                 self.show_calendar_weekdays(ui);
 
@@ -221,12 +247,28 @@ impl DatePicker<'_> {
             }
         });
     }
+}
 
-    pub fn ui(&mut self, ui: &mut egui::Ui) -> egui::Response {
+impl Widget for DatePicker<'_> {
+    fn ui(mut self, ui: &mut egui::Ui) -> egui::Response {
         let format = time::format_description::parse("[day].[month].[year]").unwrap();
         let formatted_datetime = self.date.format(&format).unwrap();
-        let button_response = ui.button(formatted_datetime.as_str());
 
+        let mut date_picker_state = ui.data(|data| {
+            data.get_temp::<DatePickerState>(self.id)
+                .unwrap_or_default()
+        });
+
+        let button = egui::Button::new(formatted_datetime + "  📅");
+        let button = if date_picker_state.calendar_opened {
+            let clicked_bg = ui.visuals().widgets.open.weak_bg_fill;
+            let clicked_stroke = ui.visuals().widgets.active.bg_stroke;
+            button.fill(clicked_bg).stroke(clicked_stroke)
+        } else {
+            button
+        };
+
+        let button_response = ui.add(button);
         if button_response.clicked() {
             ui.memory_mut(|m| m.toggle_popup(self.id));
         }
@@ -300,7 +342,12 @@ impl DatePicker<'_> {
                     m.toggle_popup(self.id);
                 });
             }
+
+            date_picker_state.calendar_opened = true;
+        } else {
+            date_picker_state.calendar_opened = false;
         }
+        ui.data_mut(|data| data.insert_temp(self.id, date_picker_state));
 
         button_response
     }

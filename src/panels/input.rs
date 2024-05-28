@@ -1,4 +1,4 @@
-use crate::date_picker;
+use crate::date_picker::DatePicker;
 
 pub struct InputPanel {
     date: time::Date,
@@ -24,8 +24,7 @@ impl InputPanel {
             return Err(super::PanelError::Error("Error text is here".to_owned()));
         }
 
-        let mut date_picker = date_picker::DatePicker::new("date_picker_1", ui, &mut self.date);
-        date_picker.ui(ui);
+        ui.add(DatePicker::new("date_picker_1", ui, &mut self.date));
 
         Ok(())
     }
