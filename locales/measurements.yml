@@ -1,0 +1,21 @@
+_version: 2
+
+app.measurements.systolic_label:
+  en: "SBP"
+  ru: "САД"
+app.measurements.diastolic_label:
+  en: "DBP"
+  ru: "ДАД"
+app.measurements.rate_label:
+  en: "HRT"
+  ru: "ПЛС"
+
+app.measurements.day_time.morning:
+  en: "Morning"
+  ru: "Утро"
+app.measurements.day_time.noon:
+  en: "Noon"
+  ru: "День"
+app.measurements.day_time.evening:
+  en: "Evening"
+  ru: "Вечер"

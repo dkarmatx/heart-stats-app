@@ -33,3 +33,6 @@ app.menu.home_panel_button_label:
 app.home_panel.content:
   en: Hello, do you wanna track your blood pressure? So you'are found us
   ru: Привет, хотели отслеживать ваше кровяносное давление? Тогда вы по адрессу
+app.input_panel.commit_button:
+  en: Commit
+  ru: Записать
